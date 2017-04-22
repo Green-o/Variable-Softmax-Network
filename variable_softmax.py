@@ -29,7 +29,13 @@ while len(neuron_seq)-1 < layer_count:
     neuron_seq.append(inp)
 neuron_seq.append(10)
 
-train_steps = input("Train iterations: ")
+while True:
+    try:
+        train_steps = int(input("Train iterations: "))
+    except ValueError:
+        print("Non-integer input.")
+    else:
+        break
 
 # Create hidden layers using input data
 layers = []
