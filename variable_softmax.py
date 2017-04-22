@@ -4,11 +4,12 @@ mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
 
 neuron_seq = [784]
 batch_size = 100
-train_steps = 2000
 
+# Input and output values 
 x = tf.placeholder(tf.float32, [None, 784])
 y = tf.placeholder(tf.float32)
 
+# Network population from CLI input
 while True:
     try:
         layer_count = int(input("Hidden layer count: "))
@@ -28,12 +29,16 @@ while len(neuron_seq)-1 < layer_count:
     neuron_seq.append(inp)
 neuron_seq.append(10)
 
+train_steps = input("Train iterations: ")
+
+# Create hidden layers using input data
 layers = []
 for l in range(len(neuron_seq)-1):
     layer = {'weights': tf.Variable(tf.truncated_normal([neuron_seq[l], neuron_seq[l+1]], stddev=.05)),
              'biases': tf.Variable(tf.constant(0.05, shape=[neuron_seq[l+1]]))}
     layers.append(layer)
 
+# Run computational graph
 def neural_network_model(data):
     ops = []
     for l in range(len(layers)):
@@ -47,6 +52,7 @@ def neural_network_model(data):
 
     return ops[len(ops)-1]
 
+# Train and update user on network's process
 def train_neural_network(x):
     prediction = neural_network_model(x)
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=y))
@@ -70,3 +76,4 @@ def train_neural_network(x):
                     print("Final accuracy: %.3f%%" % (step_accuracy*100))
 
 train_neural_network(x)
+input("Press enter to close")
